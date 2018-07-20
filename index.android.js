@@ -14,6 +14,7 @@ import {
     View
 } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
+import ListViewTest from  './ListViewTest';
 import Boy from './Boy'
 
 export default class MuKeDemo extends Component {
@@ -27,12 +28,7 @@ export default class MuKeDemo extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Navigator
-                    initialRoute = {{component: Boy}}
-                    renderScene={(route, navigator) => {
-                        let Component = route.component;
-                        return <Component navigator={navigator}{...route.params}/>
-                    }}></Navigator>
+               <ListViewTest/>
             </View>
         );
     }

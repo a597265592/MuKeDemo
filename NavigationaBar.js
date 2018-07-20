@@ -27,7 +27,6 @@ export default class NavigationBar extends Component {
     };
     static defaultProps={
         statusBar:{
-            backgroundColor:'red',
             barStyle:'light-content',
             hidden:false
         }
