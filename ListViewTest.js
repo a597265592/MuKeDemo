@@ -7,7 +7,7 @@ import {
     Image,
     ListView
 } from 'react-native';
-import NavigationBar from './NavigationaBar';
+import NavigationBar from './js/common/NavigationaBar';
 import Toast,{DURATION} from 'react-native-easy-toast'
 var data = {
     "result": [
