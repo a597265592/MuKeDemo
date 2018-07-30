@@ -51,6 +51,12 @@ const styles = StyleSheet.create({
         marginLeft:5,
         marginRight:5,
         marginVertical:3,
-        borderWidth:0.5
+        borderColor:'#dddddd',
+        borderWidth:0.5,
+        shadowColor:'gray',
+        shadowOffset:{width:0.5,height:0.5},
+        shadowOpacity:0.4,
+        shadowRadius:1,
+        elevation:2
     }
 });
