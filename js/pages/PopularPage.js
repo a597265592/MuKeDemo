@@ -3,19 +3,36 @@ import {
     Text,
     View,
     StyleSheet,
-    TextInput
+    ListView
 } from 'react-native';
 import NavigationBar from '../common/NavigationaBar';
 import DataRepository from '../expand/dao/DataRepository'
 import ScrollableTabView ,{ScrollableTabBar} from "react-native-scrollable-tab-view";
-
+import RepositoryCell from "../common/RepositoryCell"
 const URL = 'http://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=starts';
 export default class PopularPage extends Component {
+    render() {
+        return <View style={styles.container}>
+            <NavigationBar
+             title={'最热'}/>
+            <ScrollableTabView
+                renderTabBar={()=><ScrollableTabBar/>}>
+                <PopularTab tabLabel="Java" >Java</PopularTab>
+                <PopularTab tabLabel="IOS" >Ios</PopularTab>
+                <PopularTab tabLabel="Android" >Android</PopularTab>
+                <PopularTab tabLabel="JavaScript" >JavaScript</PopularTab>
+            </ScrollableTabView>
+        </View>
+    }
+}
+
+class PopularTab extends Component{
     constructor(props) {
         super(props);
         this.dataRepository = new DataRepository();
         this.state = {
+            dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1!==r2}),
             result: ''
         }
     }
@@ -25,7 +42,7 @@ export default class PopularPage extends Component {
         this.dataRepository.fetchNetRepository(url)
             .then(result => {
                 this.setState({
-                    result: JSON.stringify(result)
+                    dataSource:this.state.dataSource.cloneWithRows(result.items)
                 })
             })
             .catch(error => {
@@ -34,23 +51,20 @@ export default class PopularPage extends Component {
                 })
             })
     }
-
-    genUrl(key) {
-        return URL + key + QUERY_STR;
+    genUrl() {
+        return URL + this.props.tabLabel + QUERY_STR;
     }
-
-    render() {
-        return <View style={styles.container}>
-            <NavigationBar
-             title={'最热'}/>
-            <ScrollableTabView
-                renderTabBar={()=><ScrollableTabBar/>}
-            >
-                <Text tabLabel="Java" >Java</Text>
-                <Text tabLabel="Ios" >Ios</Text>
-                <Text tabLabel="Android" >Android</Text>
-                <Text tabLabel="JavaScript" >JavaScript</Text>
-            </ScrollableTabView>
+    componentDidMount(){
+        this.onLoad()
+    }
+    renderRow(data){
+        return <RepositoryCell data={data}/>
+    }
+    render(){
+        return <View>
+            <ListView dataSource={this.state.dataSource}
+            renderRow={(data)=>this.renderRow(data)}>
+            </ListView>
         </View>
     }
 }
