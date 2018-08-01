@@ -23,7 +23,7 @@ export default class CustomKeyPage extends Component {
     }
     loadData(){
         this.language.fetch()
-            .then(result=>{``
+            .then(result=>{
                 this.setState({
                     dataArray:result
                 })
