@@ -1,41 +1,45 @@
-
-import React from 'react';
+/**
+ * RespositoryDao
+ * @flow
+ */
+'use strict';
 
 import {
-   AsyncStorage
+    AsyncStorage,
 } from 'react-native';
+import keysData from '../../../res/data/keys.json'
 
-import keys from '../../../res/data/keys.json'
-export var FLAG_LANGUAGE={flag_language:'flag_language_language',flag_key:"flag_language_key"};
+export var FLAG_LANGUAGE = {flag_language: 'language_dao_language', flag_key: 'language_dao_key'}
+
 export default class LanguageDao{
-    constructor(flag){
+    constructor(flag) {
         this.flag = flag;
     }
-
     fetch(){
         return new Promise((resolve,reject)=>{
             AsyncStorage.getItem(this.flag,(error,result)=>{
-                if (error){
+                if(error){
                     reject(error);
+                    return;
+                }
+                if (!result){
+                    var data=this.flag===FLAG_LANGUAGE.flag_language? null:keysData;
+                    this.save(data);
+                    resolve(data);
                 }else {
-                    if (result){
-                        try {
-                            resolve(JSON.parse(result))
-                        }catch (e){
-                            reject(e);
-                        }
-                    }else {
-                        var data = this.flag===FLAG_LANGUAGE.flag_key?keys:null;
-                        this.save(data);
-                        resolve(data)
+                    try {
+                        resolve(JSON.parse(result));
+                    } catch (e) {
+                        reject(error);
                     }
                 }
-            })
-        })
+            });
+        });
     }
+    save(objectData){
+        var stringData=JSON.stringify(objectData);
+        AsyncStorage.setItem(this.flag,stringData,(error,result)=>{
 
-    save(data) {
-        AsyncStorage.setItem(this.flag,JSON.stringify(data),(error)=>{
-        })
+        });
     }
 }
